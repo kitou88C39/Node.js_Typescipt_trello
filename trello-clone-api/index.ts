@@ -8,6 +8,9 @@ app.get('/', (req, res) => {
   res.send('Hello World');
 });
 
-app.listen(PORT, () => {
-  console.log('サーバーが起動しました');
+AppDataSource.initialize().then(() => {
+  console.log('データベースに接続しました');
+  app.listen(PORT, () => {
+    console.log(`サーバーが${PORT}で起動しました`);
+  });
 });
