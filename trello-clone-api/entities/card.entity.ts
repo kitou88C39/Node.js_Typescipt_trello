@@ -29,5 +29,5 @@ export class Card {
   readonly createdDate?: Date;
 
   @UpdateDateColumn()
-  readonly updatedDate?: Date;)
+  readonly updatedDate?: Date;
 }
