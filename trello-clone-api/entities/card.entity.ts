@@ -25,6 +25,9 @@ export class Card {
   @Column()
   listId!: number;
 
+  @OneToMany(() => Card, (card) => card.list, { cascade: true })
+  cards?: Card[];
+
   @CreateDateColumn()
   readonly createdDate?: Date;
 
