@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class list {
@@ -10,6 +10,9 @@ export class list {
 
   @Column()
   position!: number;
+
+  @OneToMany(() => Card, (card) => card.list, { cascade: true })
+  cards?: Card[];
 
   @CreateDateColumn()
   readonly createdAt?: Date;
