@@ -8,24 +8,12 @@ export class list {
   @Column()
   title!: string;
 
-  @Column({ type: 'text', nullable: true })
-  description: string;
-
   @Column()
   position!: number;
 
-  @Column({ default: false })
-  completed: boolean = false;
-
-  @Column({ nullable: true })
-  dueDate?: Date;
-
-  @Column()
-  listId!: number;
-
   @CreateDateColumn()
-  readonly createdDate?: Date;
+  readonly createdAt?: Date;
 
   @UpdateDateColumn()
-  readonly updatedDate?: Date;
+  readonly updatedAt?: Date;
 }
