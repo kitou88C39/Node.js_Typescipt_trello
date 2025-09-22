@@ -1,4 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import UpdateDateColumn = require('typeorm');
+import CreateDateColumn = require('typeorm');
 
 @Entity()
 export class Card {
@@ -19,4 +21,13 @@ export class Card {
 
   @Column({ nullable: true })
   dueDate?: Date;
+
+  @Column()
+  listId!: number;
+
+  @CreateDateColumn()
+  readonly createdDate?: Date;
+
+  @UpdateDateColumn()
+  readonly updatedDate?: Date;)
 }
