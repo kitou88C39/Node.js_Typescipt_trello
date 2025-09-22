@@ -25,8 +25,8 @@ export class Card {
   @Column()
   listId!: number;
 
-  @OneToMany(() => Card, (card) => card.list, { cascade: true })
-  cards?: Card[];
+  @OneToMany(() => List, (list) => list.list, { onDelete: 'CASCADE' })
+  list?: List[];
 
   @CreateDateColumn()
   readonly createdDate?: Date;
