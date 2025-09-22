@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "ts-node-dev --respawn index.ts"
   },
+  "type": "module",
   "keywords": [],
   "author": "kitou88C39",
   "license": "ISC",
