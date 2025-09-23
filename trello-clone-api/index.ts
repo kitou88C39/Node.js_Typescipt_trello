@@ -17,6 +17,11 @@ app.post('/lists', async (req, res) => {
   try {
     const { title } = req.body;
 
+    const maxPositionListArray = await listRepository.find({
+      order: { position: 'DESC' },
+      take: 1,
+    });
+
     const list = await listRepository.save({
       title,
     });
@@ -24,7 +29,7 @@ app.post('/lists', async (req, res) => {
     res.status(201).json(list);
   } catch (error) {
     console.error('リスト作成エラー:', error);
-    res.status(500).json({ message: 'リストの作成に失敗しました。' });
+    res.status(500).json({ message: 'リストの作成に失敗しました' });
   }
 });
 
