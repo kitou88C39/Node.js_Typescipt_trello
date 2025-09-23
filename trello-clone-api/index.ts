@@ -22,6 +22,11 @@ app.post('/lists', async (req, res) => {
       take: 1,
     });
 
+    const maxPositionList = maxPositionListArray[0];
+
+    const maxPosition =
+      maxPositionList != null ? maxPositionList.position + 1 : 0;
+
     const list = await listRepository.save({
       title,
     });
