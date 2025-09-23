@@ -14,10 +14,18 @@ app.get('/', (req, res) => {
 });
 
 app.post('/lists', async (req, res) => {
-  const { title } = req.body;
+  try {
+    const { title } = req.body;
 
-  const list = await listRepository.save({ title });
-  res.json(list);
+    const list = await listRepository.save({
+      title,
+    });
+
+    res.json(list);
+  } catch (error) {
+    console.error('リスト作成エラー:', error);
+    res.status(500).json({ message: 'リストの作成に失敗しました。' });
+  }
 });
 
 AppDataSource.initialize().then(() => {
