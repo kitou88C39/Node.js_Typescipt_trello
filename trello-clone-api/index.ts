@@ -1,6 +1,7 @@
 import express from 'express';
 import { AppDataSource } from './datasource';
 import cors from 'cors';
+import { parse } from 'path';
 
 const app = express();
 const PORT = 8888;
@@ -50,6 +51,11 @@ app.get('/lists', async (req, res) => {
     console.error('リスト取得エラー:', error);
     res.status(500).json({ message: 'サーバーエラーが発生しました' });
   }
+});
+//リストの削除API
+app.delete('/lists/:id', async (req, res) => {
+  const id = parseInt(req.params.id);
+  const existingList = await listRepository.findOneBy({ where: { id } });
 });
 
 AppDataSource.initialize().then(() => {
