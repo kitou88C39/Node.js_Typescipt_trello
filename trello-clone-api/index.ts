@@ -29,12 +29,26 @@ app.post('/lists', async (req, res) => {
 
     const list = await listRepository.save({
       title,
+      position: maxPosition,
     });
 
     res.status(201).json(list);
   } catch (error) {
     console.error('リスト作成エラー:', error);
     res.status(500).json({ message: 'リストの作成に失敗しました' });
+  }
+});
+
+//リストの取得API
+app.get('/lists', async (req, res) => {
+  try {
+    const lists = await listRepository.find({
+      order: { position: 'ASC' },
+    });
+    res.status(200).json(lists);
+  } catch (error) {
+    console.error('リスト取得エラー:', error);
+    res.status(500).json({ message: 'サーバーエラーが発生しました' });
   }
 });
 
