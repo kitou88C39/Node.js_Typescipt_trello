@@ -25,7 +25,7 @@ export class Card {
   @Column()
   listId!: number;
 
-  @OneToMany(() => List, (list) => list.list, { onDelete: 'CASCADE' })
+  @ManyToMany(() => List, (list) => list.list, { onDelete: 'CASCADE' })
   list?: List[];
 
   @CreateDateColumn()
