@@ -21,7 +21,7 @@ app.post('/lists', async (req, res) => {
       title,
     });
 
-    res.json(list);
+    res.status(201).json(list);
   } catch (error) {
     console.error('リスト作成エラー:', error);
     res.status(500).json({ message: 'リストの作成に失敗しました。' });
