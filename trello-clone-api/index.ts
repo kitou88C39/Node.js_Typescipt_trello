@@ -70,6 +70,12 @@ app.delete('/lists/:id', async (req, res) => {
   }
 });
 
+//リストの更新API
+app.post('/lists', async (req, res) => {
+  try {
+  } catch (error) {}
+});
+
 AppDataSource.initialize().then(() => {
   console.log('データベースに接続しました');
   app.listen(PORT, () => {
