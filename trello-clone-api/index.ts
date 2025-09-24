@@ -56,6 +56,11 @@ app.get('/lists', async (req, res) => {
 app.delete('/lists/:id', async (req, res) => {
   const id = parseInt(req.params.id);
   const existingList = await listRepository.findOneBy({ where: { id } });
+
+    if (existingList != null) {
+      res.status(404).json({ message: "リストが見つかりません" });
+      return;
+    }
 });
 
 AppDataSource.initialize().then(() => {
