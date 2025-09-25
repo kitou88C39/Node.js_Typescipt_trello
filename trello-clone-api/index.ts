@@ -1,7 +1,6 @@
 import express from 'express';
 import { AppDataSource } from './datasource';
 import cors from 'cors';
-import { parse } from 'path';
 
 const app = express();
 const PORT = 8888;
@@ -73,7 +72,20 @@ app.delete('/lists/:id', async (req, res) => {
 //リストの更新API
 app.post('/lists', async (req, res) => {
   try {
-  } catch (error) {}
+    const { lists } = req.body;
+    const listArray = Array.isArray(lists) ? lists : [lists];
+    for (const list of listArray) {
+      await listRepository.save(list);
+    }
+    const updatedLists = await listRepository.findAll({
+      id: listArray.map((list) => list.id),
+    });
+
+    res.status(200).json(updatedLists);
+  } catch (error) {
+    console.error('リスト更新エラー:', error);
+    res.status(500).json({ message: 'サーバーエラーが発生しました' });
+  }
 });
 
 AppDataSource.initialize().then(() => {
