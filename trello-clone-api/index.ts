@@ -1,7 +1,6 @@
 import express from 'express';
 import { AppDataSource } from './datasource';
 import cors from 'cors';
-import { parse } from 'path';
 
 const app = express();
 const PORT = 8888;
@@ -9,6 +8,7 @@ app.use(express.json());
 app.use(cors());
 
 const listRepository = AppDataSource.getRepository(List);
+const cardRepository = AppDataSource.getRepository(Card);
 
 app.get('/', (req, res) => {
   res.send('Hello World');
@@ -73,7 +73,30 @@ app.delete('/lists/:id', async (req, res) => {
 //リストの更新API
 app.post('/lists', async (req, res) => {
   try {
-  } catch (error) {}
+    const { lists } = req.body;
+    const listArray = Array.isArray(lists) ? lists : [lists];
+    for (const list of listArray) {
+      await listRepository.save(list);
+    }
+    const updatedLists = await listRepository.findAll({
+      id: listArray.map((list) => list.id),
+    });
+
+    res.status(200).json(updatedLists);
+  } catch (error) {
+    console.error('リスト更新エラー:', error);
+    res.status(500).json({ message: 'サーバーエラーが発生しました' });
+  }
+});
+
+//カードの作成API
+app.post('/cards', async (req, res) => {
+  const { listId, title } = req.body;
+  const maxPositionCardArray = await cardRepository.find({
+    where: { listId },
+    order: { position: 'DESC' },
+    take: 1,
+  });
 });
 
 AppDataSource.initialize().then(() => {
