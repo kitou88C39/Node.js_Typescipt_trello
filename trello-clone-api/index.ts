@@ -8,6 +8,7 @@ app.use(express.json());
 app.use(cors());
 
 const listRepository = AppDataSource.getRepository(List);
+const cardRepository = AppDataSource.getRepository(Card);
 
 app.get('/', (req, res) => {
   res.send('Hello World');
@@ -86,6 +87,16 @@ app.post('/lists', async (req, res) => {
     console.error('リスト更新エラー:', error);
     res.status(500).json({ message: 'サーバーエラーが発生しました' });
   }
+});
+
+//カードの作成API
+app.post('/cards', async (req, res) => {
+  const { listId, title } = req.body;
+  const maxPositionCardArray = await cardRepository.find({
+    where: { listId },
+    order: { position: 'DESC' },
+    take: 1,
+  });
 });
 
 AppDataSource.initialize().then(() => {
