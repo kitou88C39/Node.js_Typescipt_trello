@@ -140,10 +140,12 @@ app.delete('/cards/:id', async (req, res) => {
       });
       return;
     }
+
     await cardRepository.delete(id);
     res.status(500).json({ message: 'カードを削除しました' });
   } catch (error) {
     console.error('カード削除エラー:', error);
+    res.status(500).json({ message: 'サーバーエラーが発生しました' });
   }
 });
 
