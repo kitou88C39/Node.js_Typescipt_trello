@@ -149,6 +149,25 @@ app.delete('/cards/:id', async (req, res) => {
   }
 });
 
+//カードの更新API
+app.put('/cards', async (req, res) => {
+  try {
+    const { cards } = req.body;
+    const cardArray = Array.isArray(cards) ? cards : [cards];
+    for (const card of cardArray) {
+      await cardRepository.save(card);
+    }
+
+    const updatedCards = await cardRepository.findBy({
+      id: In(cardArray.map((card) => card.id)),
+    });
+    res.status(200).json(updatedCards);
+  } catch (error) {
+    console.error('カード更新エラー:', error);
+    res.status(500).json({ message: 'サーバーエラーが発生しました' });
+  }
+});
+
 AppDataSource.initialize().then(() => {
   console.log('データベースに接続しました');
   app.listen(PORT, () => {
