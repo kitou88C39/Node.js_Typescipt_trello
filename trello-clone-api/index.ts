@@ -129,6 +129,17 @@ app.get('/cards', async (req, res) => {
   }
 });
 
+//カードの削除API
+app.delete('/cards/:id', async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const existingCard = await cardRepository.findOneBy({ where: { id } });
+  } catch (error) {
+    console.error('カード削除エラー:', error);
+    res.status(500).json({ message: 'サーバーエラーが発生しました' });
+  }
+});
+
 AppDataSource.initialize().then(() => {
   console.log('データベースに接続しました');
   app.listen(PORT, () => {
