@@ -1,8 +1,8 @@
 import express from 'express';
 import { AppDataSource } from './datasource';
 import cors from 'cors';
-import { List } from './entity/List.entity';
-import { Card } from './entity/Card.entity';
+import { List } from './entities/list.entity';
+import { Card } from './entities/card.entity';
 import { In } from 'typeorm';
 
 const app = express();
@@ -55,6 +55,7 @@ app.get('/lists', async (req, res) => {
     res.status(500).json({ message: 'サーバーエラーが発生しました' });
   }
 });
+
 //リストの削除API
 app.delete('/lists/:id', async (req, res) => {
   try {
@@ -94,12 +95,38 @@ app.post('/lists', async (req, res) => {
 
 //カードの作成API
 app.post('/cards', async (req, res) => {
-  const { listId, title } = req.body;
-  const maxPositionCardArray = await cardRepository.find({
-    where: { listId },
-    order: { position: 'DESC' },
-    take: 1,
-  });
+  try {
+    const { listId, title } = req.body;
+    const maxPositionCardArray = await cardRepository.find({
+      where: { listId },
+      order: { position: 'DESC' },
+      take: 1,
+    });
+    const maxPositionCard = maxPositionCardArray[0];
+    const nextPosition = maxPositionCard != null ? maxPositionCard.position : 0;
+
+    const card = await cardRepository.save({
+      listId,
+      title,
+      position: nextPosition,
+    });
+  } catch (error) {
+    console.error('カード作成エラー:', error);
+    res.status(500).json({ message: 'カードの作成に失敗しました' });
+  }
+});
+
+//カードの取得API
+app.get('/cards', async (req, res) => {
+  try {
+    const cards = await cardRepository.find({
+      order: { position: 'ASC' },
+    });
+    res.status(200).json(cards);
+  } catch (error) {
+    console.error('カード取得エラー:', error);
+    res.status(500).json({ message: 'サーバーエラーが発生しました' });
+  }
 });
 
 AppDataSource.initialize().then(() => {
