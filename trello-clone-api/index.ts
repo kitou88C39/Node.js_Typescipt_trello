@@ -134,9 +134,16 @@ app.delete('/cards/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const existingCard = await cardRepository.findOneBy({ where: { id } });
+    if (existingCard != null) {
+      res.status(404).json({
+        message: 'カードが見つかりません',
+      });
+      return;
+    }
+    await cardRepository.delete(id);
+    res.status(500).json({ message: 'カードを削除しました' });
   } catch (error) {
     console.error('カード削除エラー:', error);
-    res.status(500).json({ message: 'サーバーエラーが発生しました' });
   }
 });
 
