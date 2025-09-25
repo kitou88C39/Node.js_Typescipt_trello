@@ -1,6 +1,9 @@
 import express from 'express';
 import { AppDataSource } from './datasource';
 import cors from 'cors';
+import { List } from './entity/List.entity';
+import { Card } from './entity/Card.entity';
+import { In } from 'typeorm';
 
 const app = express();
 const PORT = 8888;
@@ -79,7 +82,7 @@ app.post('/lists', async (req, res) => {
       await listRepository.save(list);
     }
     const updatedLists = await listRepository.findAll({
-      id: listArray.map((list) => list.id),
+      id: In(listArray.map((list) => list.id)),
     });
 
     res.status(200).json(updatedLists);
